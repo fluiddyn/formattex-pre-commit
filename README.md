@@ -1,7 +1,21 @@
-# black-pre-commit-mirror
+# formattex-pre-commit-mirror
 
-mypyc wheels go brr
+A [pre-commit](https://pre-commit.com/) hook for
+[formattex](https://pypi.org/project/formattex/) and
+[formatbibtex](https://pypi.org/project/formatbibtex/).
 
-For example `pre-commit` configs, please see the [black VCS integration docs][1]
 
-[1]: https://black.readthedocs.io/en/stable/integrations/source_version_control.html
+## Usage
+
+Add the following to your `.pre-commit-config.yaml`:
+
+```yaml
+- repo: https://github.com/fluiddyn/formattex-pre-commit
+  # Formattex version.
+  rev: 0.1.4
+  hooks:
+    # Run the formatter for tex files.
+    - id: formattex
+    # Run the formatter for bibtex files.
+    - id: formatbibtex
+```
