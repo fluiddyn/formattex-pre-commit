@@ -1,18 +1,17 @@
-- id: black
-  name: black
-  description: "Black: The uncompromising Python code formatter"
-  entry: black
+- id: formattex
+  name: formattex
+  description: "formattex: The uncompromising LaTeX code formatter"
+  entry: formattex
   language: python
   minimum_pre_commit_version: 2.9.2
   require_serial: true
-  types_or: [python, pyi]
-- id: black-jupyter
-  name: black-jupyter
+  types_or: [tex]
+- id: formatbibtex
+  name: formatbibtex
   description:
-    "Black: The uncompromising Python code formatter (with Jupyter Notebook support)"
-  entry: black
+    "formatbibtex: A simple bibtex formatter based on Bibtexparser."
+  entry: formattex
   language: python
   minimum_pre_commit_version: 2.9.2
   require_serial: true
-  types_or: [python, pyi, jupyter]
-  additional_dependencies: [".[jupyter]"]
+  types_or: [bib]
