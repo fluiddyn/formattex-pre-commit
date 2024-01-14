@@ -15,30 +15,51 @@ def main():
     # get current version of formattex
     deps = pyproject["project"]["dependencies"]
     # TODO: work on update for formatbibtex
-    assert len(deps) == 1
-    formattex_dep = Requirement(deps[0])
-    assert formattex_dep.name == "formattex"
-    formattex_specs = list(formattex_dep.specifier)
-    assert len(formattex_specs) == 1
-    assert formattex_specs[0].operator == "=="
-    current_version = Version(formattex_specs[0].version)
+    assert len(deps) == 2
+    current_version = {}
+    for i, pkg in enumerate(["formattex", "formatbibtex"]):
+        formattex_dep = Requirement(deps[i])
+        assert formattex_dep.name == pkg
+        formattex_specs = list(formattex_dep.specifier)
+        assert len(formattex_specs) == 1
+        assert formattex_specs[0].operator == "=="
+        current_version[pkg] = Version(formattex_specs[0].version)
 
-    # get all versions of formattex from PyPI
-    resp = urllib3.request("GET", "https://pypi.org/pypi/formattex/json")
-    if resp.status != 200:
-        raise RuntimeError
+    print("Current versions:", current_version)
 
-    versions = [Version(release) for release in resp.json()["releases"]]
-    versions = [v for v in versions if v > current_version and not v.is_prerelease]
-    versions.sort()
+    pkg_versions = {}
 
-    for version in versions:
-        pyproject["project"]["dependencies"] = [f"formattex=={version}"]
+    for pkg in "formattex", "formatbibtex":
+        # get all versions of <pkg> from PyPI
+        resp = urllib3.request("GET", f"https://pypi.org/pypi/{pkg}/json")
+        if resp.status != 200:
+            raise RuntimeError
+
+        versions = [Version(release) for release in resp.json()["releases"]]
+        versions = [
+            v for v in versions if v > current_version[pkg] and not v.is_prerelease
+        ]
+        versions.sort()
+        pkg_versions[pkg] = versions
+
+    print("New versions:", pkg_versions)
+
+    try:
+        formatbibtex_version = pkg_versions["formatbibtex"][-1]
+    except IndexError:
+        formatbibtex_version = current_version["formatbibtex"]
+
+    for version in pkg_versions["formattex"]:
+        pyproject["project"]["dependencies"] = [
+            f"formattex=={version}",
+            f"formatbibtex=={formatbibtex_version}",
+        ]
         with open(Path(__file__).parent / "pyproject.toml", "wb") as f:
+            print(pyproject)
             tomli_w.dump(pyproject, f)
-        subprocess.run(["git", "add", "pyproject.toml"])
-        subprocess.run(["git", "commit", "-m", f"formattex {version}"])
-        subprocess.run(["git", "tag", f"{version}"])
+        # subprocess.run(["git", "add", "pyproject.toml"])
+        # subprocess.run(["git", "commit", "-m", f"formattex {version}"])
+        # subprocess.run(["git", "tag", f"{version}"])
 
 
 if __name__ == "__main__":
