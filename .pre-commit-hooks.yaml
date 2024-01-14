@@ -6,12 +6,14 @@
   minimum_pre_commit_version: 2.9.2
   require_serial: true
   types_or: [tex]
+  additional_dependencies: []
 - id: formatbibtex
   name: formatbibtex
   description:
     "formatbibtex: A simple bibtex formatter based on Bibtexparser."
-  entry: formattex
+  entry: formatbibtex
   language: python
   minimum_pre_commit_version: 2.9.2
   require_serial: true
   types_or: [bib]
+  additional_dependencies: []
