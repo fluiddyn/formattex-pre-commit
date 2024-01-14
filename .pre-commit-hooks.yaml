@@ -1,7 +1,7 @@
 - id: formattex
   name: formattex
   description: "formattex: The uncompromising LaTeX code formatter"
-  entry: formattex
+  entry: formattex --inplace
   language: python
   minimum_pre_commit_version: 2.9.2
   require_serial: true
@@ -11,7 +11,7 @@
   name: formatbibtex
   description:
     "formatbibtex: A simple bibtex formatter based on Bibtexparser."
-  entry: formatbibtex
+  entry: formatbibtex --inplace
   language: python
   minimum_pre_commit_version: 2.9.2
   require_serial: true
