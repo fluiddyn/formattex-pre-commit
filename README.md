@@ -1,4 +1,4 @@
-# formattex-pre-commit-mirror
+# formattex-pre-commit
 
 A [pre-commit](https://pre-commit.com/) hook for
 [formattex](https://pypi.org/project/formattex/) and
